@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block title %}Day Counter{% endblock %}
+
+{% block content%}
+{{ super() }}
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <body background="http://i.imgur.com/jQuxmCw.jpg">
+    <div class="centered well-lg" style="width: 80%; margin: 0px auto; padding-top: 10em">
+        <div style="background-color:rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 7px">
+            <div class="jumbotron" style="text-align: center; border-radius: 5px">
+                <h1>Progress of Kerry Returning From Italy</h1>
+                <p>There are {{ days }} days until Kerry is back in the states.</p>
+                <p>{{ time_string }}</p>
+            </div>
+            {% for time in progress_times %}
+                <div>
+                    <span style="padding-bottom: 1px" class="label label-default">{{ time[1] }}</span>
+                    <div class="progress progress-striped active" id="{{ time[1] }}Parent">
+                        <div id="{{ time[1] }}" class="{% if time[0] < 20 %} progress-bar progress-bar-danger
+                                     {% elif time[0] < 50 %} progress-bar progress-bar-warning
+                                     {% elif time[0] < 80 %} progress-bar progress-bar-info
+                                     {% else %} progress-bar progress-bar-success
+                                     {% endif %}" role="progressbar" aria-valuenow="{{ time[0] }}"
+                             aria-valuemin="0" aria-valuemax="100" style="width: {{ time[0] }}%">
+                        </div>
+                    </div>
+            </div>
+            {% endfor %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var sec = $("#Seconds");
+                var secPar = $("#SecondsParent");
+                var min = $("#Minutes");
+                var minPar = $("#MinutesParent");
+                var hour = $("#Hours");
+                var hourPar = $("#HoursParent");
+                var day = $("#Days");
+                var dayPar = $("#DaysParent");
+                var startTime = Date.now();
+                var startSecs = (sec.width() / secPar.width() * 60);
+                var startMins = (min.width() / minPar.width() * 60);
+                var startHours = (hour.width() / hourPar.width() * 24);
+                var startDays = (day.width() / dayPar.width() * 90);
+
+                function timeIncrement() {
+                    var elapsedTimeSecs = ((Date.now() - startTime) / 1000);
+                    var newSecs = elapsedTimeSecs + startSecs;
+                    sec.css({
+                        width: ((newSecs % 60) * 100 / 60) + "%"
+                    });
+                    update_color(sec, secPar);
+
+                    if(newSecs > 60) {
+                        var newMins = Math.floor(newSecs / 60) + startMins;
+                        min.css({
+                            width: ((newMins % 60) * 100 / 60) + "%"
+                        })
+                        update_color(min, minPar);
+
+                        if(newMins >= 60) {
+                            var newHours = Math.floor(newMins / 60) + startHours;
+                            hour.css({
+                                width: ((newHours % 24) * 100 / 24) + "%"
+                            });
+                            update_color(hour, hourPar);
+
+                            if(newHours >= 24) {
+                                var newDays = Math.floor(newHours / 24) + startDays;
+                                $('cite').text(function() { return Math.round(90 - newDays); });
+                                day.css({
+                                    width: (newDays * 100 / 90) + "%"
+                                });
+                                update_color(day, dayPar);
+                            }
+                        }
+                    }
+
+                }
+                setInterval(timeIncrement, 1000);
+
+                function update_color(ele, parEle) {
+                    var percent = ele.width() / parEle.width() * 100;
+                    if (percent >= 80) {
+                        ele.removeClass('progress-bar-info').addClass('progress-bar-success');
+                    }
+                    else if (percent >= 50) {
+                        ele.removeClass('progress-bar-warning').addClass('progress-bar-info');
+                    }
+                    else if (percent >= 20) {
+                        ele.removeClass('progress-bar-danger').addClass('progress-bar-warning');
+                    }
+                    else {
+                        ele.removeClass('progress-bar-success').addClass('progress-bar-danger');
+                    }
+                }
+            });
+        </script>
+    </div>
+    </div>
+ </body>
+{% endblock %}

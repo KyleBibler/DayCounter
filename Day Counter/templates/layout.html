@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <!-- Latest compiled and minified CSS -->
+
+    {% block styles %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    {% endblock %}
+    <meta charset="UTF-8">
+    <title>{% block title %}Day Counter{% endblock %}</title>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="">Day Counter</a>
+            </div>
+        </div>
+    </nav>
+</head>
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+{% block scripts %}
+
+{% endblock %}
+</html>
